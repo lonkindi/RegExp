@@ -7,7 +7,8 @@ with open("phonebook_raw.csv", encoding='utf-8') as f:
     rows = csv.reader(f, delimiter=",")
     contacts_list = list(rows)
     header = contacts_list.pop(0)
-# print(type(contacts_list[0][5]))
+
+# print(contacts_list)
 
 # TODO 1: выполните пункты 1-3 ДЗ
 contacts_list_new = [header]
@@ -32,11 +33,27 @@ for item in contacts_list:
     item[5] = res_tel
     item[6] = item[6].lower()
 
-    print(item)
+print(contacts_list)
 
+del_idx = []
+curr_val = None
+for idx, val in enumerate(contacts_list):
+    for iter in range(idx+1, len(contacts_list)):
+        curr_val = contacts_list[iter]
+        if val[0] == curr_val[0]:
+            for num in range(1, 7):
+                if len(val[num]) < len(curr_val[num]):
+                    val[num] = curr_val[num]
+            contacts_list[iter][0] = ''
+
+for item in contacts_list:
+    if item[0] != '':
+            contacts_list_new.append(item)
+
+print(contacts_list_new)
 # TODO 2: сохраните получившиеся данные в другой файл
 # код для записи файла в формате CSV
-with open("phonebook.csv", "w") as f:
+with open("phonebook.csv", "w", encoding='utf-8') as f:
     datawriter = csv.writer(f, delimiter=',')
     # Вместо contacts_list подставьте свой список
-    # datawriter.writerows(contacts_list)
+    datawriter.writerows(contacts_list_new)
